@@ -4604,7 +4604,6 @@ build_application() {
     display_error "Failed to build application"
   fi
 
-
 # Function to deploy to GitHub pages
 deploy_to_github_pages() {
   display_section "Deploying to GitHub Pages"
