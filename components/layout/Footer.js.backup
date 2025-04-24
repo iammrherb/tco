@@ -1,0 +1,1406 @@
+import React from 'react';
+
+export const Footer = () => {
+  return (
+    <footer className="bg-gray-800 text-white py-8 print:hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Portnox Cloud</h3>
+            <p className="text-gray-300 text-sm">
+              Cloud-native NAC solution with zero-trust approach, simplified deployment and minimal maintenance overhead.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Resources</h3>
+            <ul className="space-y-2 text-sm">
+              <li><a href="https://www.portnox.com/resources/" className="text-gray-300 hover:text-portnox-primary">Resource Center</a></li>
+              <li><a href="https://www.portnox.com/blog/" className="text-gray-300 hover:text-portnox-primary">Blog</a></li>
+              <li><a href="https://www.portnox.com/webinars/" className="text-gray-300 hover:text-portnox-primary">Webinars</a></li>
+              <li><a href="https://www.portnox.com/solution-briefs-datasheets/" className="text-gray-300 hover:text-portnox-primary">Solution Briefs</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Contact</h3>
+            <ul className="space-y-2 text-sm">
+              <li><a href="https://www.portnox.com/contact-sales/" className="text-gray-300 hover:text-portnox-primary">Contact Sales</a></li>
+              <li><a href="https://www.portnox.com/request-demo/" className="text-gray-300 hover:text-portnox-primary">Request Demo</a></li>
+              <li><a href="https://www.portnox.com/support/" className="text-gray-300 hover:text-portnox-primary">Support</a></li>
+              <li><a href="https://www.portnox.com/partners/" className="text-gray-300 hover:text-portnox-primary">Partners</a></li>
+            </ul>
+			</div>
+        </div>
+        <div className="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
+          <p>© {new Date().getFullYear()} Portnox. All rights reserved. This calculator provides estimates based on comprehensive research and customer data. Actual results may vary based on specific organizational requirements.</p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+import React from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useAppContext } from '../../context/AppContext';
+
+export const Sidebar = ({ isOpen, onClose }) => {
+  const router = useRouter();
+  const { vendorsList, currentVendor, setCurrentVendor } = useAppContext();
+  
+  const isActive = (path) => router.pathname === path;
+  
+  const navigationItems = [
+    { name: 'Dashboard', path: '/', icon: 'chart-bar' },
+    { name: 'TCO Calculator', path: '/calculator', icon: 'calculator' },
+    { name: 'Vendor Comparison', path: '/comparison', icon: 'switch-horizontal' },
+    { name: 'Implementation Timeline', path: '/timeline', icon: 'clock' },
+    { name: 'Vendor Profiles', path: '/vendors', icon: 'office-building' },
+    { name: 'Reports', path: '/reports', icon: 'document-report' },
+  ];
+
+  return (
+    <div className={}>
+      <div className="h-full flex flex-col bg-white border-r border-gray-200">
+        {/* Sidebar header */}
+        <div className="h-16 flex items-center justify-center border-b border-gray-200">
+          <button
+            className="p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-portnox-primary"
+            onClick={onClose}
+          >
+            {isOpen ? (
+              <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+              </svg>
+            ) : (
+              <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+              </svg>
+            )}
+          </button>
+        </div>
+        
+        {/* Main navigation */}
+        <nav className="flex-1 py-4 space-y-1 overflow-y-auto">
+          {navigationItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.path}
+              className={}
+            >
+              <div className="flex items-center">
+                <IconByName name={item.icon} className="h-5 w-5 mr-3" />
+                {isOpen && <span className="text-sm font-medium">{item.name}</span>}
+              </div>
+            </Link>
+          ))}
+        </nav>
+        
+        {/* Vendor selector */}
+        {isOpen && (
+          <div className="p-4 border-t border-gray-200">
+            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+              Compare with Portnox
+            </h3>
+            <div className="space-y-2">
+              {vendorsList.filter(v => v.id !== 'portnox').map((vendor) => (
+                <button
+                  key={vendor.id}
+                  className={}
+                  onClick={() => setCurrentVendor(vendor.id)}
+                >
+                  <div
+                    className="h-4 w-4 rounded-full mr-2"
+                    style={{ backgroundColor: vendor.primaryColor }}
+                  ></div>
+                  {vendor.shortName}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Helper component to render different icons
+const IconByName = ({ name, className }) => {
+  switch (name) {
+    case 'chart-bar':
+      return (
+        <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      );
+    case 'calculator':
+      return (
+        <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+        </svg>
+      );
+    case 'switch-horizontal':
+      return (
+        <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+        </svg>
+      );
+    case 'clock':
+      return (
+        <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      );
+    case 'office-building':
+      return (
+        <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+      );
+    case 'document-report':
+      return (
+        <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
+import React from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useAppContext } from '../../context/AppContext';
+
+export const MobileNav = ({ isOpen, onClose }) => {
+  const router = useRouter();
+  const { vendorsList, currentVendor, setCurrentVendor } = useAppContext();
+  
+  const isActive = (path) => router.pathname === path;
+  
+  if (!isOpen) return null;
+  
+  return (
+    <div className="md:hidden fixed inset-0 z-40 flex">
+      {/* Overlay */}
+      <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={onClose}></div>
+      
+      {/* Sidebar panel */}
+      <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white">
+        <div className="absolute top-0 right-0 -mr-12 pt-2">
+          <button
+            className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+            onClick={onClose}
+          >
+            <span className="sr-only">Close sidebar</span>
+            <svg className="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        <div className="pt-5 pb-4 flex-1 h-0 overflow-y-auto">
+          {/* Logo */}
+          <div className="flex-shrink-0 flex items-center px-4">
+            <div className="h-10 w-10 relative overflow-hidden rounded-full bg-portnox-light flex items-center justify-center">
+              <span className="text-portnox-primary font-bold text-lg">P</span>
+            </div>
+            <span className="ml-3 text-lg font-semibold text-gray-800">NAC Calculator</span>
+          </div>
+          
+          {/* Navigation */}
+          <nav className="mt-5 px-2 space-y-1">
+            <Link
+              href="/"
+              className={}
+              onClick={onClose}
+            >
+              <svg className="mr-4 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              Dashboard
+            </Link>
+            
+            <Link
+              href="/calculator"
+              className={}
+              onClick={onClose}
+            >
+              <svg className="mr-4 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+              TCO Calculator
+            </Link>
+            
+            <Link
+              href="/comparison"
+              className={}
+              onClick={onClose}
+            >
+              <svg className="mr-4 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
+              Vendor Comparison
+            </Link>
+            
+            <Link
+              href="/timeline"
+              className={}
+              onClick={onClose}
+            >
+              <svg className="mr-4 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Implementation Timeline
+            </Link>
+            
+            <Link
+              href="/vendors"
+              className={}
+              onClick={onClose}
+            >
+              <svg className="mr-4 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+              Vendor Profiles
+            </Link>
+            
+            <Link
+              href="/reports"
+              className={}
+              onClick={onClose}
+            >
+              <svg className="mr-4 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Reports
+            </Link>
+          </nav>
+          
+          {/* Vendor selection */}
+          <div className="mt-6 px-2">
+            <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Compare with Portnox
+            </h3>
+            <div className="mt-2 space-y-1">
+              {vendorsList.filter(v => v.id !== 'portnox').map((vendor) => (
+                <button
+                  key={vendor.id}
+                  className={}
+                  onClick={() => {
+                    setCurrentVendor(vendor.id);
+                    onClose();
+                  }}
+                >
+                  <div
+                    className="h-4 w-4 rounded-full mr-2"
+                    style={{ backgroundColor: vendor.primaryColor }}
+                  ></div>
+                  {vendor.shortName}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Contact Sales button */}
+        <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
+          <a
+            href="https://www.portnox.com/contact-sales/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-shrink-0 w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-portnox-primary hover:bg-portnox-dark"
+          >
+            Contact Sales
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+import React from 'react';
+import Link from 'next/link';
+import { useAppContext } from '../context/AppContext';
+import { getVendorColor, formatCurrency, formatPercentage } from '../lib/utils/calculations';
+
+export default function Home() {
+  const { currentVendor, getVendorDetails, organizationSize, deviceCount, yearsToProject } = useAppContext();
+  
+  const currentVendorDetails = getVendorDetails(currentVendor);
+  const portnoxDetails = getVendorDetails('portnox');
+  
+  return (
+    <div className="max-w-7xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">NAC Solutions Comparison Dashboard</h1>
+        <p className="mt-2 text-lg text-gray-600">
+          Compare total cost of ownership and implementation timelines between Portnox Cloud and traditional NAC solutions
+        </p>
+      </div>
+      
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+        <div className="px-6 py-5 border-b border-gray-200">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold text-gray-800">Current Comparison</h2>
+            <Link 
+              href="/calculator" 
+              className="text-sm text-portnox-primary hover:text-portnox-dark font-medium"
+            >
+              Customize Calculation
+            </Link>
+          </div>
+        </div>
+        
+        <div className="px-6 py-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white border border-gray-200 rounded-lg p-4 flex items-center">
+              <div 
+                className="h-12 w-12 rounded-md flex items-center justify-center mr-4"
+                style={{ backgroundColor: portnoxDetails.primaryColor }}
+              >
+                <svg className="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <div>
+                <div className="text-sm text-gray-500">Comparing</div>
+                <div className="text-lg font-semibold">{portnoxDetails.name} vs {currentVendorDetails.name}</div>
+              </div>
+            </div>
+            
+            <div className="bg-white border border-gray-200 rounded-lg p-4 flex items-center">
+              <div className="h-12 w-12 rounded-md bg-blue-100 flex items-center justify-center mr-4">
+                <svg className="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+              <div>
+                <div className="text-sm text-gray-500">Organization Size</div>
+                <div className="text-lg font-semibold capitalize">{organizationSize} ({deviceCount} devices)</div>
+              </div>
+            </div>
+            
+            <div className="bg-white border border-gray-200 rounded-lg p-4 flex items-center">
+              <div className="h-12 w-12 rounded-md bg-green-100 flex items-center justify-center mr-4">
+                <svg className="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <div className="text-sm text-gray-500">Analysis Period</div>
+                <div className="text-lg font-semibold">{yearsToProject} {yearsToProject === 1 ? 'Year' : 'Years'}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        {/* Key Metrics Summary */}
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-200">
+            <h2 className="text-xl font-semibold text-gray-800">Key Metrics</h2>
+          </div>
+          
+          <div className="px-6 py-5">
+            <div className="space-y-6">
+              <div>
+                <div className="flex justify-between mb-2">
+                  <div className="text-sm font-medium text-gray-500">TCO Savings</div>
+                  <div className="text-sm font-medium text-green-600">40-60%</div>
+                </div>
+                <div className="bg-gray-200 rounded-full h-2">
+                  <div className="bg-green-500 h-2 rounded-full" style={{ width: '55%' }}></div>
+                </div>
+              </div>
+              
+              <div>
+                <div className="flex justify-between mb-2">
+                  <div className="text-sm font-medium text-gray-500">Implementation Time Reduction</div>
+                  <div className="text-sm font-medium text-green-600">70-85%</div>
+                </div>
+                <div className="bg-gray-200 rounded-full h-2">
+                  <div className="bg-green-500 h-2 rounded-full" style={{ width: '80%' }}></div>
+                </div>
+              </div>
+              
+              <div>
+                <div className="flex justify-between mb-2">
+                  <div className="text-sm font-medium text-gray-500">Annual Operational Cost Reduction</div>
+                  <div className="text-sm font-medium text-green-600">30-50%</div>
+                </div>
+                <div className="bg-gray-200 rounded-full h-2">
+                  <div className="bg-green-500 h-2 rounded-full" style={{ width: '45%' }}></div>
+                </div>
+              </div>
+              
+              <div>
+                <div className="flex justify-between mb-2">
+                  <div className="text-sm font-medium text-gray-500">Hardware Cost Elimination</div>
+                  <div className="text-sm font-medium text-green-600">100%</div>
+                </div>
+                <div className="bg-gray-200 rounded-full h-2">
+                  <div className="bg-green-500 h-2 rounded-full" style={{ width: '100%' }}></div>
+                </div>
+              </div>
+              
+              <div>
+                <div className="flex justify-between mb-2">
+                  <div className="text-sm font-medium text-gray-500">Return on Investment (ROI)</div>
+                  <div className="text-sm font-medium text-green-600">150-300%</div>
+                </div>
+                <div className="bg-gray-200 rounded-full h-2">
+                  <div className="bg-green-500 h-2 rounded-full" style={{ width: '75%' }}></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Feature Comparison */}
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-200">
+            <h2 className="text-xl font-semibold text-gray-800">Feature Comparison</h2>
+          </div>
+          
+          <div className="px-6 py-5">
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="col-span-1"></div>
+                <div className="col-span-1 text-center">
+                  <div 
+                    className="h-8 w-8 rounded-full mx-auto"
+                    style={{ backgroundColor: currentVendorDetails.primaryColor }}
+                  ></div>
+                  <div className="text-sm font-medium mt-1">{currentVendorDetails.shortName}</div>
+                </div>
+                <div className="col-span-1 text-center">
+                  <div 
+                    className="h-8 w-8 rounded-full mx-auto"
+                    style={{ backgroundColor: portnoxDetails.primaryColor }}
+                  ></div>
+                  <div className="text-sm font-medium mt-1">{portnoxDetails.shortName}</div>
+                </div>
+              </div>
+              
+              <div className="border-t border-gray-200 pt-4">
+                <div className="grid grid-cols-3 gap-4 mb-2">
+                  <div className="col-span-1 text-sm font-medium">Cloud-Native</div>
+                  <div className="col-span-1 text-center">
+                    {currentVendorDetails.hasCloudOption ? (
+                      <svg className="h-5 w-5 mx-auto text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="h-5 w-5 mx-auto text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="col-span-1 text-center">
+                    <svg className="h-5 w-5 mx-auto text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-4 mb-2">
+                  <div className="col-span-1 text-sm font-medium">Zero Hardware</div>
+                  <div className="col-span-1 text-center">
+                    {!currentVendorDetails.hasOnPremOption ? (
+                      <svg className="h-5 w-5 mx-auto text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="h-5 w-5 mx-auto text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="col-span-1 text-center">
+                    <svg className="h-5 w-5 mx-auto text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-4 mb-2">
+                  <div className="col-span-1 text-sm font-medium">Automated Updates</div>
+                  <div className="col-span-1 text-center">
+                    {currentVendorDetails.id === 'forescout' || currentVendorDetails.id === 'securew2' || currentVendorDetails.id === 'ivanti' ? (
+                      <div className="text-xs text-center">Partial</div>
+                    ) : (
+                      <svg className="h-5 w-5 mx-auto text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="col-span-1 text-center">
+                    <svg className="h-5 w-5 mx-auto text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-4 mb-2">
+                  <div className="col-span-1 text-sm font-medium">Simple Licensing</div>
+                  <div className="col-span-1 text-center">
+                    {currentVendorDetails.id === 'securew2' ? (
+                      <svg className="h-5 w-5 mx-auto text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="h-5 w-5 mx-auto text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="col-span-1 text-center">
+                    <svg className="h-5 w-5 mx-auto text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="col-span-1 text-sm font-medium">Remote Access</div>
+                  <div className="col-span-1 text-center">
+                    {currentVendorDetails.id === 'forescout' || currentVendorDetails.id === 'securew2' || currentVendorDetails.id === 'ivanti' ? (
+                      <div className="text-xs text-center">Good</div>
+                    ) : (
+                      <div className="text-xs text-center">Limited</div>
+                    )}
+                  </div>
+                  <div className="col-span-1 text-center">
+                    <div className="text-xs text-center">Excellent</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
+            <h2 className="text-xl font-semibold text-gray-800">TCO Analysis</h2>
+            <Link 
+              href="/calculator" 
+              className="text-sm text-portnox-primary hover:text-portnox-dark font-medium"
+            >
+              Details
+            </Link>
+          </div>
+          
+          <div className="px-6 py-5">
+            <div className="flex flex-col items-center">
+              <div className="text-4xl font-bold text-green-600">40-60%</div>
+              <div className="text-lg text-gray-500 mb-4">Lower TCO</div>
+              
+              <svg className="h-24 w-24 text-green-500 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              
+              <Link 
+                href="/calculator" 
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-portnox-primary hover:bg-portnox-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-portnox-primary"
+              >
+                Calculate Your Savings
+              </Link>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
+            <h2 className="text-xl font-semibold text-gray-800">Implementation Time</h2>
+            <Link 
+              href="/timeline" 
+              className="text-sm text-portnox-primary hover:text-portnox-dark font-medium"
+            >
+              Details
+            </Link>
+          </div>
+          
+          <div className="px-6 py-5">
+            <div className="flex flex-col items-center">
+              <div className="text-4xl font-bold text-green-600">70-85%</div>
+              <div className="text-lg text-gray-500 mb-4">Faster Deployment</div>
+              
+              <svg className="h-24 w-24 text-green-500 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              
+              <Link 
+                href="/timeline" 
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-portnox-primary hover:bg-portnox-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-portnox-primary"
+              >
+                View Timeline Comparison
+              </Link>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
+            <h2 className="text-xl font-semibold text-gray-800">Feature Comparison</h2>
+            <Link 
+              href="/comparison" 
+              className="text-sm text-portnox-primary hover:text-portnox-dark font-medium"
+            >
+              Details
+            </Link>
+          </div>
+          
+          <div className="px-6 py-5">
+            <div className="flex flex-col items-center">
+              <div className="text-4xl font-bold text-green-600">12+</div>
+              <div className="text-lg text-gray-500 mb-4">Key Advantages</div>
+              
+              <svg className="h-24 w-24 text-green-500 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              
+              <Link 
+                href="/comparison" 
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-portnox-primary hover:bg-portnox-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-portnox-primary"
+              >
+                See Full Comparison
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+        <div className="px-6 py-5 border-b border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-800">All NAC Vendors Compared</h2>
+        </div>
+        
+        <div className="px-6 py-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {Object.values(getVendorDetails).map((vendor) => (
+              <div key={vendor.id} className="border border-gray-200 rounded-lg p-4 text-center">
+                <div 
+                  className="h-12 w-12 rounded-full mx-auto"
+                  style={{ backgroundColor: vendor.primaryColor }}
+                ></div>
+                <div className="mt-3 font-medium">{vendor.shortName}</div>
+                <div className="text-xs text-gray-500">{vendor.productName}</div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-6 text-center">
+            <Link 
+              href="/vendors" 
+              className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-portnox-primary"
+            >
+              View All Vendor Profiles
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+import React, { useState } from 'react';
+import { useAppContext } from '../context/AppContext';
+import { calculateResults, formatCurrency, formatPercentage } from '../lib/utils/calculations';
+
+export default function Calculator() {
+  const { 
+    currentVendor, 
+    setCurrentVendor,
+    getVendorDetails,
+    getVendorCosts,
+    getVendorImplementation,
+    organizationSize,
+    setOrganizationSize,
+    deviceCount,
+    setDeviceCount,
+    yearsToProject,
+    setYearsToProject,
+    sizeBands,
+    vendorsList
+  } = useAppContext();
+  
+  const [fteCost, setFteCost] = useState(120000); // Annual FTE cost
+  const [downtimeCost, setDowntimeCost] = useState(5000); // Hourly downtime cost
+  const [activeTab, setActiveTab] = useState('tco');
+  const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+  const [customFactors, setCustomFactors] = useState({
+    networkComplexity: 'medium',
+    hasMultipleLocations: false,
+    locationCount: 1,
+    hasComplexAuthentication: false,
+    hasLegacyDevices: false,
+    percentLegacyDevices: 10,
+    hasCloudIntegration: false,
+    hasCustomPolicies: false,
+    policyComplexityLevel: 'medium'
+  });
+  
+  // Get vendor details and data
+  const currentVendorDetails = getVendorDetails(currentVendor);
+  const portnoxDetails = getVendorDetails('portnox');
+  
+  // Get cost factors
+  const currentCostFactors = getVendorCosts(currentVendor, organizationSize);
+  const portnoxCostFactors = getVendorCosts('portnox', organizationSize);
+  
+  // Get implementation timelines
+  const currentImplementation = getVendorImplementation(currentVendor, organizationSize);
+  const portnoxImplementation = getVendorImplementation('portnox', organizationSize);
+  
+  // Calculate results
+  const calculationInputs = {
+    currentSolution: currentVendor,
+    organizationSize,
+    deviceCount,
+    yearsToProject,
+    currentCostFactors,
+    portnoxCostFactors,
+    currentImplementation,
+    portnoxImplementation,
+    fteCost,
+    downtimeCost,
+    complexityFactors: customFactors
+  };
+  
+  const { tcoResults, implementationResults, yearByYearComparisonData, costBreakdownCurrent, costBreakdownPortnox } = 
+    calculateResults(calculationInputs);
+  
+  return (
+    <div className="max-w-7xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">TCO & ROI Calculator</h1>
+        <p className="mt-2 text-lg text-gray-600">
+          Compare costs between traditional NAC solutions and Portnox Cloud
+        </p>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Configuration column */}
+        <div className="md:col-span-1">
+          <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+            <div className="px-6 py-5 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-800">Calculator Configuration</h2>
+            </div>
+            
+            <div className="px-6 py-5 space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Compare Portnox with
+                </label>
+                <select
+                  className="form-select w-full"
+                  value={currentVendor}
+                  onChange={(e) => setCurrentVendor(e.target.value)}
+                >
+                  {vendorsList.filter(v => v.id !== 'portnox').map(vendor => (
+                    <option key={vendor.id} value={vendor.id}>{vendor.name} ({vendor.productName})</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Organization Size
+                </label>
+                <select
+                  className="form-select w-full"
+                  value={organizationSize}
+                  onChange={(e) => setOrganizationSize(e.target.value)}
+                >
+                  <option value="small">Small (1-500 devices)</option>
+                  <option value="medium">Medium (501-2,500 devices)</option>
+                  <option value="large">Large (2,501-10,000 devices)</option>
+                  <option value="enterprise">Enterprise (10,001+ devices)</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Number of Devices
+                </label>
+                <input
+                  type="number"
+                  className="form-input w-full"
+                  value={deviceCount}
+                  onChange={(e) => setDeviceCount(parseInt(e.target.value) || 0)}
+                  min={sizeBands[organizationSize].min}
+                  max={sizeBands[organizationSize].max}
+                />
+                <div className="mt-1 text-xs text-gray-500">
+                  Range: {sizeBands[organizationSize].min} - {sizeBands[organizationSize].max}
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Years to Project
+                </label>
+                <select
+                  className="form-select w-full"
+                  value={yearsToProject}
+                  onChange={(e) => setYearsToProject(parseInt(e.target.value))}
+                >
+                  <option value="1">1 Year</option>
+                  <option value="2">2 Years</option>
+                  <option value="3">3 Years</option>
+                  <option value="5">5 Years</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  IT Staff Annual Cost ($)
+                </label>
+                <input
+                  type="number"
+                  className="form-input w-full"
+                  value={fteCost}
+                  onChange={(e) => setFteCost(parseInt(e.target.value) || 0)}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Hourly Downtime Cost ($)
+                </label>
+                <input
+                  type="number"
+                  className="form-input w-full"
+                  value={downtimeCost}
+                  onChange={(e) => setDowntimeCost(parseInt(e.target.value) || 0)}
+                />
+              </div>
+              
+              <div>
+                <button
+                  className="w-full flex justify-between items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-portnox-primary"
+                  onClick={() => setShowAdvancedSettings(!showAdvancedSettings)}
+                >
+                  <span>Advanced Settings</span>
+                  <svg
+                    className={}
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                {showAdvancedSettings && (
+                  <div className="mt-4 space-y-4 p-4 border border-gray-200 rounded-md bg-gray-50">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Network Complexity
+                      </label>
+                      <select
+                        className="form-select w-full"
+                        value={customFactors.networkComplexity}
+                        onChange={(e) => setCustomFactors({...customFactors, networkComplexity: e.target.value})}
+                      >
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                      </select>
+                    </div>
+                    
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="multipleLocations"
+                        className="form-checkbox"
+                        checked={customFactors.hasMultipleLocations}
+                        onChange={(e) => setCustomFactors({...customFactors, hasMultipleLocations: e.target.checked})}
+                      />
+                      <label htmlFor="multipleLocations" className="ml-2 block text-sm text-gray-700">
+                        Multiple Physical Locations
+                      </label>
+                    </div>
+                    
+                    {customFactors.hasMultipleLocations && (
+                      <div className="ml-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Number of Locations
+                        </label>
+                        <input
+                          type="number"
+                          className="form-input w-full"
+                          value={customFactors.locationCount}
+                          onChange={(e) => setCustomFactors({...customFactors, locationCount: Math.max(1, parseInt(e.target.value) || 1)})}
+                          min="1"
+                        />
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="complexAuth"
+                        className="form-checkbox"
+                        checked={customFactors.hasComplexAuthentication}
+                        onChange={(e) => setCustomFactors({...customFactors, hasComplexAuthentication: e.target.checked})}
+                      />
+                      <label htmlFor="complexAuth" className="ml-2 block text-sm text-gray-700">
+                        Complex Authentication Requirements
+                      </label>
+                    </div>
+                    
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="legacyDevices"
+                        className="form-checkbox"
+                        checked={customFactors.hasLegacyDevices}
+                        onChange={(e) => setCustomFactors({...customFactors, hasLegacyDevices: e.target.checked})}
+                      />
+                      <label htmlFor="legacyDevices" className="ml-2 block text-sm text-gray-700">
+                        Legacy Devices to Support
+                      </label>
+                    </div>
+                    
+                    {customFactors.hasLegacyDevices && (
+                      <div className="ml-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Percentage of Legacy Devices
+                        </label>
+                        <div className="flex items-center">
+                          <input
+                            type="range"
+                            className="w-full mr-2"
+                            min="1"
+                            max="100"
+                            value={customFactors.percentLegacyDevices}
+                            onChange={(e) => setCustomFactors({...customFactors, percentLegacyDevices: parseInt(e.target.value)})}
+                          />
+                          <span className="text-sm w-10 text-right">{customFactors.percentLegacyDevices}%</span>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="cloudIntegration"
+                        className="form-checkbox"
+                        checked={customFactors.hasCloudIntegration}
+                        onChange={(e) => setCustomFactors({...customFactors, hasCloudIntegration: e.target.checked})}
+                      />
+                      <label htmlFor="cloudIntegration" className="ml-2 block text-sm text-gray-700">
+                        Cloud Service Integrations
+                      </label>
+                    </div>
+                    
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="customPolicies"
+                        className="form-checkbox"
+                        checked={customFactors.hasCustomPolicies}
+                        onChange={(e) => setCustomFactors({...customFactors, hasCustomPolicies: e.target.checked})}
+                      />
+                      <label htmlFor="customPolicies" className="ml-2 block text-sm text-gray-700">
+                        Custom Security Policies
+                      </label>
+                    </div>
+                    
+                    {customFactors.hasCustomPolicies && (
+                      <div className="ml-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Policy Complexity Level
+                        </label>
+                        <select
+                          className="form-select w-full"
+                          value={customFactors.policyComplexityLevel}
+                          onChange={(e) => setCustomFactors({...customFactors, policyComplexityLevel: e.target.value})}
+                        >
+                          <option value="low">Low</option>
+                          <option value="medium">Medium</option>
+                          <option value="high">High</option>
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Results column */}
+        <div className="md:col-span-2">
+          <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+            <div className="border-b border-gray-200">
+              <nav className="-mb-px flex">
+                <button
+                  className={}
+                  onClick={() => setActiveTab('tco')}
+                >
+                  TCO Results
+                </button>
+                <button
+                  className={}
+                  onClick={() => setActiveTab('timeline')}
+                >
+                  Implementation Timeline
+                </button>
+                <button
+                  className={}
+                  onClick={() => setActiveTab('roi')}
+                >
+                  ROI Analysis
+                </button>
+              </nav>
+            </div>
+            
+            <div className="p-6">
+              {activeTab === 'tco' && (
+                <div>
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-lg font-semibold">Total Cost of Ownership Analysis</h2>
+                    <div className="text-sm text-gray-500">{yearsToProject}-year projection</div>
+                  </div>
+                  
+                  <div className="bg-blue-50 p-4 rounded-lg mb-6">
+                    <h3 className="text-md font-medium text-blue-800 mb-2">
+                      TCO Summary
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-gray-600">{currentVendorDetails.name} TCO:</p>
+                        <p className="text-xl font-bold">{formatCurrency(tcoResults.currentTCO)}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Portnox Cloud TCO:</p>
+                        <p className="text-xl font-bold">{formatCurrency(tcoResults.portnoxTCO)}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Total Savings:</p>
+                        <p className="text-xl font-bold text-green-600">
+                          {formatCurrency(tcoResults.totalSavings)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Savings Percentage:</p>
+                        <p className="text-xl font-bold text-green-600">
+                          {formatPercentage(tcoResults.savingsPercentage)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gray-50 p-4 rounded-lg mb-6">
+                    <h3 className="text-md font-medium text-gray-800 mb-2">
+                      Financial Metrics
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-gray-600">Return on Investment (ROI):</p>
+                        <p className="text-xl font-bold text-blue-600">
+                          {formatPercentage(tcoResults.roi)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Payback Period:</p>
+                        <p className="text-xl font-bold text-blue-600">
+                          {tcoResults.paybackPeriod < 100 ? 
+                             `${tcoResults.paybackPeriod.toFixed(1)} years` : 
+                            'N/A'}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Annual Operational Savings:</p>
+                        <p className="text-xl font-bold text-green-600">
+                          {formatCurrency(tcoResults.annualSavings)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Initial Cost Savings:</p>
+                        <p className="text-xl font-bold text-green-600">
+                          {formatCurrency(tcoResults.initialCostSavings)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mb-6">
+                    <h3 className="text-md font-medium text-gray-800 mb-2">
+                      Year by Year Comparison
+                    </h3>
+                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Year
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              {currentVendorDetails.name}
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Portnox Cloud
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Savings
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {yearByYearComparisonData.map((yearData, index) => (
+                            <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                {yearData.year}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {formatCurrency(yearData.current)}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {formatCurrency(yearData.portnox)}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium">
+                                {formatCurrency(yearData.savings)}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {activeTab === 'timeline' && (
+                <div>
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-lg font-semibold">Implementation Timeline Analysis</h2>
+                  </div>
+                  
+                  <div className="bg-blue-50 p-4 rounded-lg mb-6">
+                    <h3 className="text-md font-medium text-blue-800 mb-2">Timeline Comparison</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-gray-600">{currentVendorDetails.name} Implementation:</p>
+                        <p className="text-xl font-bold">
+                          {implementationResults.currentImplTime.toFixed(0)} days
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Portnox Cloud Implementation:</p>
+                        <p className="text-xl font-bold">
+                          {implementationResults.portnoxImplTime.toFixed(0)} days
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Time Saved:</p>
+                        <p className="text-xl font-bold text-green-600">
+                          {implementationResults.implTimeSavings.toFixed(0)} days
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Time Saved Percentage:</p>
+                        <p className="text-xl font-bold text-green-600">
+                          {implementationResults.implTimeSavingsPercentage.toFixed(1)}%
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-indigo-50 p-4 rounded-lg mb-6">
+                    <h3 className="text-md font-medium text-indigo-800 mb-2">Business Impact of Faster Implementation</h3>
+                    <ul className="space-y-2 text-sm">
+                      <li className="flex items-start">
+                        <span className="text-green-500 mr-2">✓</span>
+                        <span>
+                          Faster time to security with <strong>{implementationResults.implTimeSavingsPercentage.toFixed(0)}%</strong> reduction in vulnerabilities during transition
+                        </span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-green-500 mr-2">✓</span>
+                        <span>
+                          <strong>{implementationResults.implTimeSavings.toFixed(0)} days</strong> of additional productive IT staff time for other projects
+                        </span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-green-500 mr-2">✓</span>
+                        <span>
+                          <strong>{formatCurrency(implementationResults.implTimeSavings * 8 * 150)}</strong> approximate value of saved implementation resources (based on average IT hourly rates)
+                        </span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-green-500 mr-2">✓</span>
+                        <span>
+                          <strong>Reduced business disruption</strong> with minimal network changes and downtime
+                        </span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-green-500 mr-2">✓</span>
+                        <span>
+                          <strong>Faster ROI</strong> through immediate deployment of security controls
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+              
+              {activeTab === 'roi' && (
+                <div>
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-lg font-semibold">ROI Analysis</h2>
+                  </div>
+                  
+                  <div className="bg-green-50 p-4 rounded-lg mb-6">
+                    <h3 className="text-md font-medium text-green-800 mb-2">
+                      Return on Investment Summary
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-gray-600">ROI ({yearsToProject} years):</p>
+                        <p className="text-xl font-bold text-green-600">
+                          {formatPercentage(tcoResults.roi)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Payback Period:</p>
+                        <p className="text-xl font-bold text-blue-600">
+                          {tcoResults.paybackPeriod < 100 ? 
+                             : 
+                            'N/A'}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Total Savings:</p>
+                        <p className="text-xl font-bold text-green-600">
+                          {formatCurrency(tcoResults.totalSavings)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Investment Cost:</p>
+                        <p className="text-xl font-bold">
+                          {formatCurrency(tcoResults.portnoxTCO)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gray-50 p-4 rounded-lg mb-6">
+                    <h3 className="text-md font-medium text-gray-800 mb-2">
+                      Cost Reduction Breakdown
+                    </h3>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex justify-between mb-1">
+                          <div className="text-sm font-medium">Hardware Savings</div>
+                          <div className="text-sm font-medium text-green-600">
+                            {formatCurrency(currentCostFactors.initialHardwareCost)}
+                          </div>
+                        </div>
+                        <div className="bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-green-500 h-2 rounded-full" 
+                            style={{ 
+                              width:  
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between mb-1">
+                          <div className="text-sm font-medium">Maintenance Savings</div>
+                          <div className="text-sm font-medium text-green-600">
+                            {formatCurrency((currentCostFactors.annualMaintenanceCost - portnoxCostFactors.annualMaintenanceCost) * yearsToProject)}
+                          </div>
+                        </div>
+                        <div className="bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-green-500 h-2 rounded-full" 
+                            style={{ 
+                              width:  
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between mb-1">
+                          <div className="text-sm font-medium">IT Staff Savings</div>
+                          <div className="text-sm font-medium text-green-600">
+                            {formatCurrency(fteCost * (currentCostFactors.fteCount - portnoxCostFactors.fteCount) * yearsToProject)}
+                          </div>
+                        </div>
+                        <div className="bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-green-500 h-2 rounded-full" 
+                            style={{ 
+                              width:  
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between mb-1">
+                          <div className="text-sm font-medium">Downtime Reduction Savings</div>
+                          <div className="text-sm font-medium text-green-600">
+                            {formatCurrency(downtimeCost * (currentCostFactors.estimatedAnnualDowntimeHours - portnoxCostFactors.estimatedAnnualDowntimeHours) * yearsToProject)}
+                          </div>
+                        </div>
+                        <div className="bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-green-500 h-2 rounded-full" 
+                            style={{ 
+                              width:  
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between mb-1">
+                          <div className="text-sm font-medium">Implementation Savings</div>
+                          <div className="text-sm font-medium text-green-600">
+                            {formatCurrency(
+                              (currentCostFactors.implementationServicesCost - portnoxCostFactors.implementationServicesCost) +
+                              (currentCostFactors.trainingCost - portnoxCostFactors.trainingCost) +
+                              (currentCostFactors.networkRedesignCost - portnoxCostFactors.networkRedesignCost)
+                            )}
+                          </div>
+                        </div>
+                        <div className="bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-green-500 h-2 rounded-full" 
+                            style={{ 
+                              width:  
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+# Function to create vendor logos (actual images for demo)
+create_vendor_logos() {
+  display_section "Creating Vendor Logo Placeholders"
+  
+  mkdir -p public/images/vendors
+  
+  # Base64 encoded tiny placeholder logos for each vendor
+  # In a real environment, you would use actual vendor logos
+  
+  # Portnox
+  cat > public/images/vendors/portnox-logo.png << EOL
+iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAMJSURBVHgB7d0/TBNhHMfx773rH2gDJAal0ETiYCJxcGFxYXFhcXJycXJycnECdkYXJycnJ0wYHRxIHGDQxCKVQAyxQf551t+TJ5Q0LQW5u+f5fR9Cel3u6XOfPM/13pRSSgCshaABBIAAGkAACKABBIAAGkAACKABBIAAGkAACKABBIAAGkAACKABBIAAGkAACKABBIAAGkAACKABBIAAGkAACKABBIAAGkAACKABBIAAGkAACKABBIAAGkAACKABBIAAGkAACKABBIAAGkAACKABBIAAGkAACKABBIAAGkAACKABBIAAGiAB/oB/IFCvV9JMo2V7+5dsbv6U5vN1iaKWGAuyLCuSplVpf30qFvPXjEXm7t0HQRjmZGvrlywtrcj29i+xZjAYHgUQ7Ozski9ffsjX1TUZPXVaRkZKzY0fuBFHIlZfW3sjX7781BNAM9QzgBv+q9WvUq/XhZ3jiRA2njgN4tBtGAdwi7xisYu5fbjFYC53Qazq7R0THyYvLnCFXbh4Saxqnnz5UAF+79/v+g9sBvD74EulM5LLnZTjzG/8/Qcgh/J7BhgcPCW9vWNHbrw7HMzOvpLpaRdCl9dLwWQyGYwP/ffzZwiCwNuwpqbuy/j4VTGsJD5MAvn+1Vc9N35iYsJrAO5pZngXoP8WcHDnz9y44X0Y6F4GNk8FbSsWi+IDL5fG7vx/bGxMfOBlBhgePi0+8BKAeyhkfQ3QxMsQMDk56WUdYG0I8LYIrFTuSz7fJQcJw1CmpqbEB28BuEOfTqeDWq0m7eLOBCYnH8ntO/e8HAp24u0qwB0OdjfXAfW9mjSa64CDhW69XpdK5bHcuvvAy3m/T17XAe78f3FxUQ7jRgm3rnBrhk78PvU7hs+rAb8LvSRJgnK5LM0jgMOHBHcYWK1WZXb2jVy+csP78GCF93GAWq0aLC+/a94S/sjOzm+Znf3QHPr9n/cbYT4AB0wlGPjjyZMXbd/4/6sZ4NCnc40W6xcF/SMsYMQPGP0FZpvMGYwAAAAASUVORK5CYII=
